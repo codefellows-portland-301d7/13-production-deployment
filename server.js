@@ -1,6 +1,6 @@
 var express = require('express'),
   // DONE: require in our request proxy module
-  requestProxy = require('express-request-proxy'),
+  requestProxy = require('express-request-proxy'), // library requre('') is assigned to requestProxy
   port = process.env.PORT || 3000,
   app = express();
 
@@ -9,8 +9,13 @@ var express = require('express'),
 
 function proxyGitHub(request, response) {
   console.log('Routing Github request for', request.params[0]);
+  // console.log('api key is: ', API_KEY);
+  // console.log('process.env: ', process.env);
   (requestProxy({
-    url: 'https://api.github.com/' + request.params[0]
+    url: 'https://api.github.com/' + request.params[0],
+    query: {
+      access_token: process.env.API_KEY // the API_KEY:value is a property on the process.env obj
+    }
   }))(request, response);
 };
 
